@@ -1,0 +1,18 @@
+{
+  "name": "superiorbot2",
+  "version": "0.0.1",
+  "description": "A superior twitter bot",
+  "main": "bot.js",
+  "scripts": {
+    "test": "node bot.js"
+  },
+  "author": "Ian C",
+  "license": "ISC",
+  "dependencies": {
+    "bufferutil": "^3.0.2",
+    "discord.js": "^11.2.1",
+    "discord.js-commando": "^0.9.0",
+    "opusscript": "0.0.4",
+    "uws": "^8.14.1"
+  }
+}
