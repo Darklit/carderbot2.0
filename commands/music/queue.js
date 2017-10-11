@@ -25,8 +25,8 @@ class QueueCommand extends Commando.Command {
 
   run(message,args){
     var guildName = message.guild.name.toLowerCase();
-    if(this.client.registry.resolveCommand('music:play').queue){
-      var songList = this.client.registry.resolveCommand('music:play').queue[guildName].songs;
+    if(this.client.registry.resolveCommand('music:play').data){
+      var songList = this.client.registry.resolveCommand('music:play').data[guildName].songs;
       var newArray = [];
       var tempvar = 0;
       for(var i = 0; i < songList.length; i++){
