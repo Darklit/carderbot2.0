@@ -9,7 +9,7 @@ class EmojiCommand extends Commando.Command {
       name: 'emoji',
       group: 'chattools',
       memberName: 'emoji',
-      description: 'Manipulate emojis n shit',
+      description: 'Manipulate emojis',
       guildOnly: true,
 
 
@@ -47,16 +47,22 @@ class EmojiCommand extends Commando.Command {
         }
         console.log(stdout);
       });
-      var doShit = () => {
+      var emoStuff = () => {
         if(serverEmojis.exists("name",args.name)){
           message.guild.deleteEmoji(serverEmojis.find("name",args.name),"To be changed...");
           message.guild.createEmoji(`${__dirname}/resize/emojis.png`,args.name)
+          .then(emo => {
+            message.reply(`Emoji: ${emo} was created`);
+          })
           .catch(err => {
             console.log(err);
             message.reply("Error while creating emoji!");
           });
         }else{
           message.guild.createEmoji(`${__dirname}/resize/emojis.png`,args.name)
+          .then(emo => {
+            message.reply(`Emoji: ${emo} was created`);
+          })
           .catch(err => {
             console.log(err);
             message.reply("Error while creating emoji!");
@@ -64,7 +70,7 @@ class EmojiCommand extends Commando.Command {
         }
       }
       message.channel.startTyping();
-      setTimeout(doShit,10000);
+      setTimeout(emoStuff,10000);
       message.channel.stopTyping();
     }
   }
