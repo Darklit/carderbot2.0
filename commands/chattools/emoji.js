@@ -69,9 +69,18 @@ class EmojiCommand extends Commando.Command {
           });
         }
       }
+      var deleteFile = () =>{
+        console.log("here");
+        var file = './commands/chattools/resize/emojis.png';
+        if(fs.existsSync(file)){
+          fs.unlinkSync(file);
+          console.log("File removed");
+        }
+      }
       message.channel.startTyping();
       setTimeout(emoStuff,10000);
       message.channel.stopTyping();
+      setTimeout(deleteFile,11000);
     }
   }
 }
