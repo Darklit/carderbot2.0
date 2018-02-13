@@ -4,7 +4,7 @@
   "description": "A superior twitter bot",
   "main": "bot.js",
   "scripts": {
-    "test": "node bot.js"
+    "start": "node bot.js"
   },
   "author": "Ian C",
   "license": "ISC",
@@ -12,9 +12,10 @@
     "bufferutil": "^3.0.2",
     "discord.js": "^11.2.1",
     "discord.js-commando": "^0.9.0",
+    "firebase": "^4.9.0",
     "opusscript": "0.0.4",
     "request": "^2.83.0",
     "uws": "^8.14.1",
-    "ytdl-core": "^0.18.1"
+    "ytdl-core": "^0.20.1"
   }
 }

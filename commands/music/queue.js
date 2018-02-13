@@ -24,41 +24,33 @@ class QueueCommand extends Commando.Command {
   }
 
   run(message,args){
-    var guildName = message.guild.name.toLowerCase();
-    if(this.client.registry.resolveCommand('music:play').data){
-      var songList = this.client.registry.resolveCommand('music:play').data[guildName].songs;
-      var newArray = [];
-      var tempvar = 0;
-      for(var i = 0; i < songList.length; i++){
-        if(!(songList[i] == '')){
-          newArray[tempvar] = songList[i];
-          tempvar++;
-        }
-      }
-      var mes = 'The current queue is:\n';
-      var queuenum = 1;
-      if(newArray.length == 0){
-        message.channel.stopTyping();
-        message.reply('There is no queue!');
-      }else{
+    var data = this.client.registry.resolveCommand('music:play').servers[message.guild.id];
+    if(data !== undefined){
+      if(data.nowPlaying != "Nothing"){
+        var queue = data.queue;
+        var currentPlaying = data.nowPlaying;
+        var queueMessage = "";
+        var queueNum = 0;
         message.channel.startTyping();
-      }
-      for(var i = 0; i < newArray.length; i++){
-        console.log(newArray);
-        ytdl.getInfo(newArray[i],{downloadURL: true}, (err, info) =>{
-          if(err) throw err;
-            mes+= `(${queuenum}): ${info.title} \n`;
-            queuenum++;
-            if(queuenum == (newArray.length + 1)){
-              message.channel.stopTyping();
-              message.reply(mes);
-            }else{
-              console.log(queuenum);
-            }
-        });
-      }
-    }else{
-      message.reply('There is no queue!');
+        ytdl.getInfo(currentPlaying,{downloadURL:true}).then(info => {
+          queueMessage = `Now playing: ${info.title}`;
+          if(queue.length == 0){message.channel.stopTyping(); message.reply(queueMessage); }
+          for(var i = 0; i < queue.length; i++){
+            ytdl.getInfo(queue[i],{downloadURL:true}).then(dat => {
+              queueMessage+=`\n${i}: ${dat.title}`;
+              queueNum++;
+              if(queueNum == queue.length){
+                message.channel.stopTyping();
+                message.reply(queueMessage);
+              }
+            }).catch(() => {
+              queueMessage+=`\n${i}: ${queue[i]}`;
+              queueNum++;
+              console.log('error!');
+            });
+          }
+        }).catch(console.error);
+      }else message.reply("No queue!");
     }
   }
 }

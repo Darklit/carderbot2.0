@@ -42,7 +42,7 @@ class SearchCommand extends Commando.Command {
           sites: bodyObj[Object.keys(bodyObj)[3]]
         };
         var termNum = 0;
-        const filter = m => (m.content.toLowerCase() == 'no' || m.content.toLowerCase() == 'yes') && m.author.id != config.botid;
+        const filter = m => (m.content.toLowerCase() == 'no' || m.content.toLowerCase() == 'yes') && m.author.id != config.botid && m.author.id == message.author.id;
         const retry = () =>{
           termNum++;
           if(jsonObj.terms[termNum] == undefined){

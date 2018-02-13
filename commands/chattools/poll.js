@@ -61,10 +61,12 @@ class PollCommand extends Commando.Command {
     }, function(error, response, body){
       console.log('error:', error);
       //200 status code is basically a success code.
-      if(response.statusCode == 200){
-        message.reply('http://www.strawpoll.me/' + body.id);
-      }else{
-        message.reply('Error!');
+      if(response.statusCode !== undefined){
+        if(response.statusCode == 200){
+          message.reply('http://www.strawpoll.me/' + body.id);
+        }else{
+          message.reply('Error!');
+        }
       }
     });
   }

@@ -22,73 +22,67 @@ class PlayCommand extends Commando.Command {
       ]
       */
     });
+    this.servers = {};
+    for(var i = 0; i < client.guilds.array().length; i++){
+      if(client.guilds.array()[i].available) this.servers[client.guilds.array()[i].id] = {
+        dispatcher: {},
+        playing: false,
+        queue: [],
+        nowPlaying: "Nothing"
+      };
+    }
+    console.log('constructed');
   }
 
   run(message,args){
-    this.setup(message);
-    if(message.member.voiceChannel != undefined){
-      var guildName = message.guild.name.toLowerCase();
-      if((args.toLowerCase().includes('youtube.com/watch?')) || (args.toLowerCase().includes('youtu.be'))){
-        if(this.data[guildName].playing){
-          this.data[guildName].songs[this.data[guildName].songs.length] = args;
-          message.reply('Song added to queue!');
-        }else{
-          this.data[guildName].songs[0] = args;
-          this.playMusic(message,this.data[guildName].songs[0]);
+    if(this.servers[message.guild.id] !== undefined){
+      if(this.servers[message.guild.id].playing){ this.servers[message.guild.id].queue.push(args); message.reply("Added to queue");}
+      else{ this.servers[message.guild.id].nowPlaying = args; console.log(args);}
+      if(!this.servers[message.guild.id].playing){
+        if(message.member.voiceChannel !== undefined && message.member.voiceChannel !== null){
+          this.playMusic(message);
         }
       }
-    }else{
-      message.reply('Join a voice channel first!');
-    }
+    }else this.getGuilds(this.client);
   }
-  setup(message){
-    if(this.data == undefined){
-      this.data = {};
-    }
-    if(!(this.data[message.guild.name.toLowerCase()])){
-      var jso = {
-        songs : [
 
-        ],
-        queuenum: 0,
-        playing: false,
-        voiceChannel: null,
-        dispatcher: null
-      };
-      this.data[message.guild.name.toLowerCase()] = jso;
-    }
-  }
-  playMusic(message,link){
-    var guildName = message.guild.name.toLowerCase();
-    this.data[guildName].voiceChannel = message.member.voiceChannel;
-    this.data[guildName].voiceChannel.join().then(connection => {
-      this.data[guildName].playing = true;
-      const stream = ytdl(link, {filter: 'audioonly'});
-      this.data[guildName].dispatcher = connection.playStream(stream,streamOptions);
-      this.data[guildName].dispatcher.on('end',reason => {
-        if((reason.toLowerCase().includes('stream is')) || (reason.toLowerCase() == 'user')){
-          var index = this.data[guildName].songs.indexOf(link);
-          if((this.data[guildName].songs[index+1] != undefined) && (this.data[guildName].songs[index+1] != '')){
-            this.data[guildName].songs[index] = '';
-            this.playMusic(message,this.data[guildName].songs[index+1]);
+  playMusic(message){
+    message.member.voiceChannel.join().then(connection => {
+      const stream = ytdl(this.servers[message.guild.id].nowPlaying, {filter: 'audioonly'});
+      this.servers[message.guild.id].dispatcher = connection.playStream(stream,streamOptions);
+      this.servers[message.guild.id].playing = true;
+      this.servers[message.guild.id].dispatcher.on('end',reason => {
+        if(reason.toLowerCase().includes('stream is') || reason.toLowerCase().includes('user')){
+          if(this.servers[message.guild.id].queue.length>=1){
+            this.servers[message.guild.id].nowPlaying = this.servers[message.guild.id].queue[0];
+            var q = this.servers[message.guild.id].queue;
+            var newQueue = [];
+            for(var i = 0; i < q.length; i++){
+              if(i!=0) newQueue.push(q[i]);
+            }
+            this.servers[message.guild.id].queue = newQueue;
+            this.playMusic(message);
           }else{
-            var jso = {
-              songs : [
-
-              ],
-              queuenum: 0,
-              playing: false,
-              voiceChannel: null,
-              dispatcher: null
-            };
-            this.data[guildName].voiceChannel.leave();
-            this.data[guildName] = jso;
+            this.servers[message.guild.id].nowPlaying = "Nothing";
+            this.servers[message.guild.id].playing = false;
+            this.servers[message.guild.id].dispatcher = {};
+            message.member.voiceChannel.leave();
           }
-        }else{
-          console.log(reason);
         }
       })
-    })
+    });
+  }
+
+  getGuilds(client){
+    this.servers = {};
+    for(var i = 0; i < client.guilds.array().length; i++){
+      if(client.guilds.array()[i].available) this.servers[client.guilds.array()[i].id] = {
+        dispatcher: {},
+        playing: false,
+        queue: [],
+        nowPlaying: "Nothing"
+      };
+    }
   }
 }
 

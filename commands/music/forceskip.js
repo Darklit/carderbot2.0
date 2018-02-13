@@ -26,9 +26,11 @@ class ForceSkipCommand extends Commando.Command {
 
   run(message,args){
     if(message.author.id == config.ownerid){
-      var guildName = message.guild.name.toLowerCase();
-      this.client.registry.resolveCommand('music:play').data[guildName].dispatcher.end();
-      message.reply('Skipped!');
+      var data = this.client.registry.resolveCommand('music:play').servers[message.guild.id];
+      if(data !== undefined){
+        data.dispatcher.end();
+        message.reply("Skipped!");
+      }
     }
   }
 }
