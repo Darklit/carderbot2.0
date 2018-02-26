@@ -32,6 +32,7 @@ class SkipCommand extends Commando.Command {
         const filter = m => m.content.toLowerCase() == 'i';
         const collector = msg.channel.createMessageCollector(filter, {time: 10000});
         collector.on('collect', m => {
+
           var tries = 0;
           for(var i = 0; i < voted.length; i++){
             if(voted[i] != m.author.id) tries++;
