@@ -22,7 +22,8 @@ client.registry
     ['chattools', 'Chat moderation'],
     ['admin', 'Tools to help the bot and admins'],
     ['music', "Music commands"],
-    ['economy', 'Manage money or do things relating to money']
+    ['economy', 'Manage money or do things relating to money'],
+    ['spotify', 'Manage and use your spotify account!']
   ])
   .registerDefaults()
 

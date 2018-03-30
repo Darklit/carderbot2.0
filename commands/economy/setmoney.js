@@ -35,13 +35,13 @@ class SetMoneyCommand extends Commando.Command {
       if(res){
         var member = methods.findUser(args.user,message.guild);
         if(member !== null){
-          firebase.database().ref('users').child(member.user.id).child('money').once('value').then(snap => {
+          firebase.database().ref('money').child(member.user.id).once('value').then(snap => {
             if(snap.exists()){
-              firebase.database().ref('users').child(member.user.id).child('money').set(args.amount);
+              firebase.database().ref('money').child(member.user.id).set(args.amount);
               message.reply("Money set");
             }else{
               methods.addUser(member.user).then(()=> {
-                firebase.database().ref('users').child(member.user.id).child('money').set(args.amount).then(()=>{
+                firebase.database().ref('money').child(member.user.id).set(args.amount).then(()=>{
                   message.reply("Money set");
                 }).catch(console.error);
               }).catch(console.error);

@@ -36,7 +36,7 @@ class PayCommand extends Commando.Command {
       var members = message.guild.members.array();
       for(var i = 0; i < members.length; i++){
         if(members[i].displayName.toLowerCase() == args.name.toLowerCase()){
-          firebase.database().ref('/users').child(`${members[i].user.id}`).once('value').then(snap => {
+          firebase.database().ref('/money').child(`${members[i].user.id}`).once('value').then(snap => {
             if(snap.val() === null){
               methods.addUser(members[i].user).then(() => {
                 this.processMoney(message,args,members[i].user.id);
@@ -52,10 +52,10 @@ class PayCommand extends Commando.Command {
   }
 
   processMoney(message,args,id){
-    firebase.database().ref('/users').child(`${message.author.id}`).child('money').once('value').then(snap => {
+    firebase.database().ref('/money').child(`${message.author.id}`).once('value').then(snap => {
       if(snap.val() !== null){
         let money = snap.val();
-        firebase.database().ref('/users').child(`${id}`).child('money').once('value').then(data => {
+        firebase.database().ref('/money').child(`${id}`).once('value').then(data => {
           if(data.val() !== null){
             let money2 = data.val();
             if(money>=args.amount){

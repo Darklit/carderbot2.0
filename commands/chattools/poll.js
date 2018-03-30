@@ -46,7 +46,7 @@ class PollCommand extends Commando.Command {
       var test = {
         title: args,
         options: options1,
-        multi: true
+        multi: false
       };
       this.post(test,message);
     });
@@ -55,14 +55,17 @@ class PollCommand extends Commando.Command {
   post(text,message){
     //Requests to post data to strawpoll.
     request.post({
-      url: 'https://strawpoll.me/api/v2/polls',
+      url: 'https://www.strawpoll.me/api/v2/polls',
       json: text,
+      mode: 'no-cors',
       followAllRedirects: true
     }, function(error, response, body){
       console.log('error:', error);
       //200 status code is basically a success code.
       if(response.statusCode !== undefined){
         if(response.statusCode == 200){
+          console.log(Object.keys(body));
+          console.log(response);
           message.reply('http://www.strawpoll.me/' + body.id);
         }else{
           message.reply('Error!');
