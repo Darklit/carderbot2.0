@@ -9,8 +9,8 @@ class MoneyListCommand extends Commando.Command {
       name: 'moneylist',
       group: 'economy',
       memberName: 'moneylist',
-      description: 'Get the top ten richest people that the bot uses',
-      guildOnly: false,
+      description: 'Get the top 10 people with the most money.',
+      guildOnly: true,
 
       /*
       args: [
