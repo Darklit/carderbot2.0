@@ -35,4 +35,10 @@ client.registry
 
   client.on('ready', () =>{
     console.log('Ready!');
+    client.user.setPresence({
+      game: {
+        name: '=help for a list of my commands!',
+        status: 'idle'
+      }
+    });
   });

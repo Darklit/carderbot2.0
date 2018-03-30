@@ -10,9 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "bufferutil": "^3.0.2",
+    "cheerio": "^1.0.0-rc.2",
     "discord.js": "^11.2.1",
     "discord.js-commando": "^0.9.0",
     "firebase": "^4.9.0",
+    "node-fetch": "^2.1.2",
     "opusscript": "0.0.4",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
